@@ -22,7 +22,8 @@ use visit::*;
 use syntax::visit_new::Visitor;
 
 mod visit;
-mod doctree;
+pub mod doctree;
+mod stringify;
 
 fn get_ast_and_resolve(crate: &Path) -> (@ast::crate, middle::resolve::CrateMap, ast_map::map) {
     let parsesess = parse::new_parse_sess(None);
@@ -53,7 +54,8 @@ fn get_ast_and_resolve(crate: &Path) -> (@ast::crate, middle::resolve::CrateMap,
 
 fn main() {
     let cratename = Path(os::args()[1]);
-    let (crate, cmap, amap) = get_ast_and_resolve(&cratename);
-    let v = RustdocVisitor::new();
+    let (crate, _cmap, _amap) = get_ast_and_resolve(&cratename);
+    let mut v = RustdocVisitor::new();
     v.visit_crate(crate);
+    println(fmt!("%?", v));
 }
